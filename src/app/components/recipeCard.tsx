@@ -72,7 +72,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
           />
         ) : (
           <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-            <span className="text-gray-400">Pas d'image</span>
+            <span className="text-gray-400">Pas d&apos;image</span>
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
