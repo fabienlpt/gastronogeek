@@ -69,6 +69,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
             alt={recipe.title}
             layout="fill"
             objectFit="cover"
+            loading="lazy"
           />
         ) : (
           <div className="w-full h-full bg-gray-200 flex items-center justify-center">

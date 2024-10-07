@@ -23,6 +23,7 @@ export default async function RecipeDetailPage({
         <div>
           {recipe.images && recipe.images.length > 0 && (
             <Image
+              loading="lazy"
               src={recipe.images[0]}
               alt={recipe.title}
               width={500}

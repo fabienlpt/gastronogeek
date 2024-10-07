@@ -13,7 +13,7 @@ export default function Header() {
   return (
     <header className="px-8 py-4 flex items-center justify-between bg-transparent relative">
       <Link href="/" className="flex items-center w-1/5">
-        <Image src="/logo.svg" alt="Logo" width={146} height={48} />
+        <Image src="/logo.svg" alt="Logo" loading="lazy" width={146} height={48} />
       </Link>
 
       {!isSearchPage && (
