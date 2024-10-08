@@ -42,9 +42,6 @@ export default function Header() {
           isSearchPage ? "w-4/5 justify-end" : "w-1/5 justify-end"
         }`}
       >
-        <Link href="/about" className="text-black hover:text-gray-700">
-          À propos
-        </Link>
         <Link href="/contact" className="text-black hover:text-gray-700">
           Contact
         </Link>

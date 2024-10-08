@@ -1,16 +1,17 @@
 import React from "react";
 import { getRecipes } from "@/lib/api";
-import RecipeCard from "@/components/recipeCard";
+import HighlightRecipe from "@/components/highlightRecipe";
 
 async function RecipesPage() {
   const recipes = await getRecipes();
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Nos Recettes</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {recipes.map((recipe) => (
-          <RecipeCard key={recipe.slug} recipe={recipe} />
+      <h2 className="text-2xl font-bold mb-4">À propos</h2>
+      <h2 className="text-2xl font-bold mb-4">Notre sélection du mois</h2>
+      <div className="flex flex-col">
+        {recipes.slice(0, 3).map((recipe, index) => (
+          <HighlightRecipe key={recipe.slug} recipe={recipe} onLeft={index % 2 === 0} />
         ))}
       </div>
     </div>
