@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useRef } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import HighlightRecipe from "@/components/highlightRecipe";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import Image from "next/image";
+import { useRef } from "react";
 import SplitType from 'split-type';
 import { Recipe } from "./types/recipe";
 

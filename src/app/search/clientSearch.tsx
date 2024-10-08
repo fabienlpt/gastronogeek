@@ -6,7 +6,7 @@ import RecipeCard from "@/components/recipeCard";
 import { Recipe } from "@/types/recipe";
 
 interface ClientSearchProps {
-  initialRecipes: Recipe[];
+  recipes: Recipe[];
 }
 
 interface Filters {
@@ -22,8 +22,7 @@ interface FilterItem {
   label: string;
 }
 
-export default function ClientSearch({ initialRecipes }: ClientSearchProps) {
-  const [recipes] = useState<Recipe[]>(initialRecipes);
+export default function ClientSearch({ recipes }: ClientSearchProps) {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
   const [selectedFilter, setSelectedFilter] = useState<string>("");
@@ -120,21 +119,12 @@ export default function ClientSearch({ initialRecipes }: ClientSearchProps) {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="relative w-full h-[500px] mb-8">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: "url('/search_banner.jpg')",
-          }}
-        >
-          <div className="absolute inset-0 bg-black bg-opacity-60"></div>
-        </div>
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
-          <h1 className="text-4xl font-bold text-white mb-6">
-            Découvrez nos recettes
-          </h1>
-          <form onSubmit={handleSearch} className="w-full max-w-2xl mb-8">
+    <div className="w-full mb-4">
+      <section className="relative h-screen w-full flex items-center justify-center mb-12 bg-cover bg-center" style={{backgroundImage: "url('/search_banner.jpg')"}}>
+        <div className="absolute inset-0 bg-black opacity-40"></div>
+        <div className="z-10 text-center">
+          <h1 className="text-5xl font-bold text-white mb-8">Découvrez nos recettes</h1>
+          <form onSubmit={handleSearch} className="w-full max-w-2xl mx-auto mb-8">
             <div className="flex items-center bg-white rounded-lg overflow-hidden shadow-lg">
               <SearchIcon className="text-gray-400 ml-3" size={24} />
               <input
@@ -146,7 +136,7 @@ export default function ClientSearch({ initialRecipes }: ClientSearchProps) {
               />
             </div>
           </form>
-          <div className="w-full max-w-4xl">
+          <div className="w-full max-w-4xl mx-auto">
             <div className="flex flex-wrap gap-2 justify-center">
               {allFilters.map((filter) => (
                 <button
@@ -164,10 +154,10 @@ export default function ClientSearch({ initialRecipes }: ClientSearchProps) {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-semibold mb-4">Résultats</h2>
+        <h2 className="text-3xl font-bold mb-6">Résultats</h2>
         {filteredRecipes.length === 0 ? (
           <p>Aucun résultat trouvé.</p>
         ) : (
