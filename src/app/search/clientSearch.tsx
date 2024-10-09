@@ -120,11 +120,18 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
 
   return (
     <div className="w-full mb-4">
-      <section className="relative h-screen w-full flex items-center justify-center mb-12 bg-cover bg-center" style={{backgroundImage: "url('/search_banner.jpg')"}}>
-        <div className="absolute inset-0 bg-black opacity-40"></div>
+      <section
+        className="relative h-screen w-full flex items-center justify-center mb-12 bg-cover bg-center"
+        style={{ backgroundImage: "url('/search_banner.jpg')" }}
+      >
         <div className="z-10 text-center">
-          <h1 className="text-5xl font-bold text-white mb-8">Découvrez nos recettes</h1>
-          <form onSubmit={handleSearch} className="w-full max-w-2xl mx-auto mb-8">
+          <h1 className="text-5xl font-bold text-white mb-8">
+            Découvrez nos recettes
+          </h1>
+          <form
+            onSubmit={handleSearch}
+            className="w-full max-w-2xl mx-auto mb-8"
+          >
             <div className="flex items-center bg-white rounded-lg overflow-hidden shadow-lg">
               <SearchIcon className="text-gray-400 ml-3" size={24} />
               <input
