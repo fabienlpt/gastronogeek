@@ -27,34 +27,40 @@ const getDifficultyLabel = (difficulty: number): string => {
   }
 };
 
-const HighlightRecipe: React.FC<HighlightRecipeProps> = ({ recipe, onLeft }) => {
+const HighlightRecipe: React.FC<HighlightRecipeProps> = ({
+  recipe,
+  onLeft,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    if (!containerRef.current || !contentRef.current) return;
+  useGSAP(
+    () => {
+      if (!containerRef.current || !contentRef.current) return;
 
-    gsap.fromTo(
-      contentRef.current,
-      {
-        x: onLeft ? "100%" : "-100%",
-        opacity: 0,
-      },
-      {
-        x: "0%",
-        opacity: 1,
-        duration: 3,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 80%",
-          end: "bottom center",
-          scrub: true,
-          toggleActions: "play reverse play reverse",
+      gsap.fromTo(
+        contentRef.current,
+        {
+          x: onLeft ? "100%" : "-100%",
+          opacity: 0,
         },
-      }
-    );
-  }, { dependencies: [onLeft], scope: containerRef });
+        {
+          x: "0%",
+          opacity: 1,
+          duration: 3,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 80%",
+            end: "bottom center",
+            scrub: true,
+            toggleActions: "play reverse play reverse",
+          },
+        }
+      );
+    },
+    { dependencies: [onLeft], scope: containerRef }
+  );
 
   return (
     <Link href={`/recipes/${recipe.slug}`} className="block">
@@ -64,7 +70,8 @@ const HighlightRecipe: React.FC<HighlightRecipeProps> = ({ recipe, onLeft }) => 
           onLeft ? "flex-row" : "flex-row-reverse"
         }`}
       >
-        <div className={`w-1/2 h-full relative overflow-hidden ${
+        <div
+          className={`w-1/2 h-full relative overflow-hidden ${
             onLeft ? "rounded-l-lg" : "rounded-r-lg"
           }`}
         >
@@ -82,10 +89,12 @@ const HighlightRecipe: React.FC<HighlightRecipeProps> = ({ recipe, onLeft }) => 
             </div>
           )}
         </div>
-        <div 
+        <div
           ref={contentRef}
-          className={`recipe-content w-1/2 h-full from-black/90 to-black/60 p-4 flex flex-col justify-between overflow-hidden ${
-            onLeft ? "rounded-r-lg bg-gradient-to-l" : "rounded-l-lg bg-gradient-to-r"
+          className={`recipe-content w-1/2 h-full from-gray-800/90 to-gray-800/60 p-4 flex flex-col justify-between overflow-hidden ${
+            onLeft
+              ? "rounded-r-lg bg-gradient-to-l"
+              : "rounded-l-lg bg-gradient-to-r"
           }`}
         >
           <div>

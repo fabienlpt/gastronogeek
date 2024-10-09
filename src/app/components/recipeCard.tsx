@@ -76,8 +76,8 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
             <span className="text-gray-400">Pas d&apos;image</span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-        <div className="recipe-content absolute bottom-[-10px] left-0 right-0 bg-gradient-to-t from-black/90 to-black/60">
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-800 via-gray-800/30 to-transparent" />
+        <div className="recipe-content absolute bottom-[-10px] left-0 right-0 bg-gradient-to-t from-gray-800/90 to-gray-800/60">
           <div className="p-4">
             <h3 className="text-white font-bold text-lg truncate">
               {recipe.title}
