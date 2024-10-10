@@ -11,9 +11,9 @@ interface ClientSearchProps {
 }
 
 interface Filters {
-  category: string;
-  license: string;
-  type: string;
+  categories: string[];
+  licenses: string[];
+  types: string[];
   difficulty: string;
 }
 
@@ -24,9 +24,9 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
   const [searchTerm, setSearchTerm] = useState<string>(searchParams.get('search') || "");
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
   const [selectedFilters, setSelectedFilters] = useState<Filters>({
-    category: searchParams.get('category') || "",
-    license: searchParams.get('license') || "",
-    type: searchParams.get('type') || "",
+    categories: searchParams.get('categories')?.split(',') || [],
+    licenses: searchParams.get('licenses')?.split(',') || [],
+    types: searchParams.get('types')?.split(',') || [],
     difficulty: searchParams.get('difficulty') || "",
   });
 
@@ -76,9 +76,9 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
         recipe.commonTitle.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesFilters =
-        (selectedFilters.category === "" || recipe.category === selectedFilters.category) &&
-        (selectedFilters.license === "" || recipe.license === selectedFilters.license) &&
-        (selectedFilters.type === "" || recipe.type === selectedFilters.type) &&
+        (selectedFilters.categories.length === 0 || selectedFilters.categories.includes(recipe.category)) &&
+        (selectedFilters.licenses.length === 0 || selectedFilters.licenses.includes(recipe.license)) &&
+        (selectedFilters.types.length === 0 || selectedFilters.types.includes(recipe.type)) &&
         (selectedFilters.difficulty === "" || recipe.difficulty.toString() === selectedFilters.difficulty);
 
       return matchesSearch && matchesFilters;
@@ -91,8 +91,13 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
     else params.delete('search');
     
     Object.entries(selectedFilters).forEach(([key, value]) => {
-      if (value) params.set(key, value);
-      else params.delete(key);
+      if (Array.isArray(value) && value.length > 0) {
+        params.set(key, value.join(','));
+      } else if (typeof value === 'string' && value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
     });
 
     const newUrl = `${window.location.pathname}?${params.toString()}`;
@@ -103,10 +108,19 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
     e.preventDefault();
   };
 
-  const toggleFilter = (type: keyof Filters, value: string) => {
+  const toggleFilter = (type: keyof Omit<Filters, 'difficulty'>, value: string) => {
     setSelectedFilters(prev => ({
       ...prev,
-      [type]: prev[type] === value ? "" : value
+      [type]: prev[type].includes(value)
+        ? prev[type].filter(item => item !== value)
+        : [...prev[type], value]
+    }));
+  };
+
+  const toggleDifficulty = (value: string) => {
+    setSelectedFilters(prev => ({
+      ...prev,
+      difficulty: prev.difficulty === value ? "" : value
     }));
   };
 
@@ -136,26 +150,44 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
             </div>
           </form>
           <div className="w-full max-w-4xl mx-auto">
-            {Object.entries(filters).map(([filterType, filterValues]) => (
-              <div key={filterType} className="mb-4">
-                <h3 className="text-white mb-2">{filterType.charAt(0).toUpperCase() + filterType.slice(1)}</h3>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {filterValues.map((value) => (
+            <div className="mb-4">
+              <h3 className="text-white mb-2">Filtres</h3>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {['categories', 'licenses', 'types'].map(filterType => 
+                  filters[filterType as keyof typeof filters].map((value) => (
                     <button
                       key={`${filterType}-${value}`}
-                      onClick={() => toggleFilter(filterType as keyof Filters, value.toString())}
+                      onClick={() => toggleFilter(filterType as keyof Omit<Filters, 'difficulty'>, value.toString())}
                       className={`px-3 py-1 rounded-full ${
-                        selectedFilters[filterType as keyof Filters] === value.toString()
+                        selectedFilters[filterType as keyof Omit<Filters, 'difficulty'>].includes(value.toString())
                           ? "bg-blue-500 text-white"
                           : "bg-white text-gray-800"
                       }`}
                     >
-                      {filterType === 'difficulties' ? getDifficultyLabel(value as number) : value}
+                      {value}
                     </button>
-                  ))}
-                </div>
+                  ))
+                )}
               </div>
-            ))}
+            </div>
+            <div className="mb-4">
+              <h3 className="text-white mb-2">Difficulté</h3>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {filters.difficulties.map((value) => (
+                  <button
+                    key={`difficulty-${value}`}
+                    onClick={() => toggleDifficulty(value.toString())}
+                    className={`px-3 py-1 rounded-full ${
+                      selectedFilters.difficulty === value.toString()
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-gray-800"
+                    }`}
+                  >
+                    {getDifficultyLabel(value as number)}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
