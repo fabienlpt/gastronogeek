@@ -11,9 +11,15 @@ export default function Header() {
   const isSearchPage = pathname === "/search";
 
   return (
-    <header className="px-8 py-4 flex items-center justify-between bg-transparent relative">
+    <header className="w-full px-8 py-4 flex items-center justify-between bg-gray-800 bg-opacity-70 fixed z-20 top-0 left-0">
       <Link href="/" className="flex items-center w-1/5">
-        <Image src="/logo.svg" alt="Logo" loading="lazy" width={146} height={48} />
+        <Image
+          src="/logo.png"
+          alt="Logo"
+          loading="lazy"
+          width={146}
+          height={48}
+        />
       </Link>
 
       {!isSearchPage && (
@@ -42,7 +48,7 @@ export default function Header() {
           isSearchPage ? "w-4/5 justify-end" : "w-1/5 justify-end"
         }`}
       >
-        <Link href="/contact" className="text-black hover:text-gray-700">
+        <Link href="/contact" className="text-white hover:text-gray-200">
           Contact
         </Link>
       </nav>
