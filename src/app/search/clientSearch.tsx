@@ -4,30 +4,33 @@ import React, { useState, useEffect, useMemo } from "react";
 import { SearchIcon } from "lucide-react";
 import RecipeCard from "@/components/recipeCard";
 import { Recipe } from "@/types/recipe";
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface ClientSearchProps {
   recipes: Recipe[];
 }
 
 interface Filters {
-  categories: string[];
-  licenses: string[];
-  types: string[];
-  difficulties: number[];
-}
-
-interface FilterItem {
+  category: string;
+  license: string;
   type: string;
-  value: string;
-  label: string;
+  difficulty: string;
 }
 
 export default function ClientSearch({ recipes }: ClientSearchProps) {
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
-  const [selectedFilter, setSelectedFilter] = useState<string>("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const filters: Filters = useMemo(() => {
+  const [searchTerm, setSearchTerm] = useState<string>(searchParams.get('search') || "");
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
+  const [selectedFilters, setSelectedFilters] = useState<Filters>({
+    category: searchParams.get('category') || "",
+    license: searchParams.get('license') || "",
+    type: searchParams.get('type') || "",
+    difficulty: searchParams.get('difficulty') || "",
+  });
+
+  const filters = useMemo(() => {
     const tempFilters = recipes.reduce(
       (acc, recipe) => {
         acc.categories.add(recipe.category);
@@ -65,32 +68,6 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
     }
   };
 
-  const allFilters: FilterItem[] = useMemo(
-    () => [
-      ...filters.categories.map((filter) => ({
-        type: "Catégorie",
-        value: filter,
-        label: filter,
-      })),
-      ...filters.licenses.map((filter) => ({
-        type: "License",
-        value: filter,
-        label: filter,
-      })),
-      ...filters.types.map((filter) => ({
-        type: "Type",
-        value: filter,
-        label: filter,
-      })),
-      ...filters.difficulties.map((filter) => ({
-        type: "Difficulté",
-        value: filter.toString(),
-        label: getDifficultyLabel(filter),
-      })),
-    ],
-    [filters]
-  );
-
   useEffect(() => {
     const filtered = recipes.filter((recipe) => {
       const matchesSearch =
@@ -98,24 +75,39 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
         recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         recipe.commonTitle.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const matchesFilter =
-        selectedFilter === "" ||
-        recipe.category === selectedFilter ||
-        recipe.license === selectedFilter ||
-        recipe.type === selectedFilter ||
-        recipe.difficulty.toString() === selectedFilter;
+      const matchesFilters =
+        (selectedFilters.category === "" || recipe.category === selectedFilters.category) &&
+        (selectedFilters.license === "" || recipe.license === selectedFilters.license) &&
+        (selectedFilters.type === "" || recipe.type === selectedFilters.type) &&
+        (selectedFilters.difficulty === "" || recipe.difficulty.toString() === selectedFilters.difficulty);
 
-      return matchesSearch && matchesFilter;
+      return matchesSearch && matchesFilters;
     });
     setFilteredRecipes(filtered);
-  }, [recipes, searchTerm, selectedFilter]);
+
+    // Mise à jour de l'URL
+    const params = new URLSearchParams(searchParams.toString());
+    if (searchTerm) params.set('search', searchTerm);
+    else params.delete('search');
+    
+    Object.entries(selectedFilters).forEach(([key, value]) => {
+      if (value) params.set(key, value);
+      else params.delete(key);
+    });
+
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState(null, '', newUrl);
+  }, [recipes, searchTerm, selectedFilters, searchParams]);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
-  const toggleFilter = (value: string) => {
-    setSelectedFilter((prev) => (prev === value ? "" : value));
+  const toggleFilter = (type: keyof Filters, value: string) => {
+    setSelectedFilters(prev => ({
+      ...prev,
+      [type]: prev[type] === value ? "" : value
+    }));
   };
 
   return (
@@ -137,21 +129,26 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
             </div>
           </form>
           <div className="w-full max-w-4xl mx-auto">
-            <div className="flex flex-wrap gap-2 justify-center">
-              {allFilters.map((filter) => (
-                <button
-                  key={`${filter.type}-${filter.value}`}
-                  onClick={() => toggleFilter(filter.value)}
-                  className={`px-3 py-1 rounded-full ${
-                    selectedFilter === filter.value
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-gray-800"
-                  }`}
-                >
-                  {filter.label}
-                </button>
-              ))}
-            </div>
+            {Object.entries(filters).map(([filterType, filterValues]) => (
+              <div key={filterType} className="mb-4">
+                <h3 className="text-white mb-2">{filterType.charAt(0).toUpperCase() + filterType.slice(1)}</h3>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {filterValues.map((value) => (
+                    <button
+                      key={`${filterType}-${value}`}
+                      onClick={() => toggleFilter(filterType as keyof Filters, value.toString())}
+                      className={`px-3 py-1 rounded-full ${
+                        selectedFilters[filterType as keyof Filters] === value.toString()
+                          ? "bg-blue-500 text-white"
+                          : "bg-white text-gray-800"
+                      }`}
+                    >
+                      {filterType === 'difficulties' ? getDifficultyLabel(value as number) : value}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
