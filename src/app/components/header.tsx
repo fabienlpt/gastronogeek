@@ -11,7 +11,7 @@ export default function Header() {
   const isSearchPage = pathname === "/search";
 
   return (
-    <header className="w-full px-8 py-4 flex items-center justify-between bg-gray-800 bg-opacity-70 fixed z-20 top-0 left-0">
+    <header className="w-full px-8 py-4 flex items-center justify-between bg-gray-800 bg-opacity-70 fixed z-10 top-0 left-0">
       <Link href="/" className="flex items-center w-1/5">
         <Image
           src="/logo.png"
