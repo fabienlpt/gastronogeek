@@ -19,6 +19,7 @@ export default function ClientSearch({
 }: ClientSearchProps) {
   const router = useRouter();
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const [searchTerm, setSearchTerm] = useState<string>(
     (searchParams.search as string) || ""
@@ -80,6 +81,12 @@ export default function ClientSearch({
       return matchesSearch && matchesFilters;
     });
   }, [recipes, searchTerm, selectedFilters]);
+
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -196,6 +203,7 @@ export default function ClientSearch({
                 <SearchIcon className="text-gray-400 ml-6" size={30} />
                 <input
                   type="text"
+                  ref={searchInputRef}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Rechercher une recette..."
