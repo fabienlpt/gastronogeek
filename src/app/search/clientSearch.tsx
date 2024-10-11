@@ -1,25 +1,20 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
-import { SearchIcon } from "lucide-react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
+import { SearchIcon, SlidersHorizontal, X } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import FilterSidebar from "@/components/filterSidebar";
 import RecipeCard from "@/components/recipeCard";
 import { Recipe } from "@/types/recipe";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Filters } from "@/types/filters";
 
 interface ClientSearchProps {
   recipes: Recipe[];
 }
 
-interface Filters {
-  categories: string[];
-  licenses: string[];
-  types: string[];
-  difficulty: string;
-}
-
 export default function ClientSearch({ recipes }: ClientSearchProps) {
-  const router = useRouter();
   const searchParams = useSearchParams();
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   const [searchTerm, setSearchTerm] = useState<string>(
     searchParams.get("search") || ""
@@ -31,6 +26,7 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
     types: searchParams.get("types")?.split(",").filter(Boolean) || [],
     difficulty: searchParams.get("difficulty") || "",
   }));
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const filters = useMemo(() => {
     const tempFilters = recipes.reduce(
@@ -78,21 +74,7 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
     });
   }, [recipes, searchTerm, selectedFilters]);
 
-  const getDifficultyLabel = (difficulty: number): string => {
-    switch (difficulty) {
-      case 1:
-        return "Facile";
-      case 2:
-        return "Intermédiaire";
-      case 3:
-        return "Difficile";
-      default:
-        return "Inconnu";
-    }
-  };
-
   useEffect(() => {
-    // Mise à jour de l'URL
     const params = new URLSearchParams(searchParams.toString());
     if (searchTerm) params.set("search", searchTerm);
     else params.delete("search");
@@ -134,78 +116,122 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
     }));
   };
 
+  const getDifficultyLabel = (difficulty: number): string => {
+    switch (difficulty) {
+      case 1:
+        return "Facile";
+      case 2:
+        return "Intermédiaire";
+      case 3:
+        return "Difficile";
+      default:
+        return "Inconnu";
+    }
+  };
+
+  const activeFilters = useMemo(() => {
+    return Object.entries(selectedFilters).flatMap(([type, values]) => {
+      if (type === "difficulty") {
+        return values ? [{ type, value: values }] : [];
+      }
+      return values.map((value: string) => ({ type, value }));
+    });
+  }, [selectedFilters]);
+
+  const removeFilter = (type: string, value: string) => {
+    if (type === "difficulty") {
+      setSelectedFilters((prev) => ({ ...prev, difficulty: "" }));
+    } else {
+      setSelectedFilters((prev) => ({
+        ...prev,
+        [type]: prev[type as keyof Omit<Filters, "difficulty">].filter(
+          (v) => v !== value
+        ),
+      }));
+    }
+  };
+
+  const clearAllFilters = () => {
+    setSelectedFilters({
+      categories: [],
+      licenses: [],
+      types: [],
+      difficulty: "",
+    });
+  };
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target as Node)
+      ) {
+        setIsSidebarOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="w-full mb-4">
       <section
         className="relative h-screen w-full flex items-center justify-center mb-12 bg-cover bg-center"
         style={{ backgroundImage: "url('/search_banner.jpg')" }}
       >
-        <div className="z-10 text-center">
+        <div className="z-10 text-center w-full max-w-[60%] mx-auto px-4">
           <h1 className="text-5xl font-bold text-white mb-8">
             Découvrez nos recettes
           </h1>
-          <form
-            onSubmit={handleSearch}
-            className="w-full max-w-2xl mx-auto mb-8"
-          >
-            <div className="flex items-center bg-white rounded-lg overflow-hidden shadow-lg">
-              <SearchIcon className="text-gray-400 ml-3" size={24} />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Rechercher une recette..."
-                className="flex-grow p-3 outline-none text-gray-700"
-              />
-            </div>
-          </form>
-          <div className="w-full max-w-4xl mx-auto">
-            <div className="mb-4">
-              <h3 className="text-white mb-2">Filtres</h3>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {["categories", "licenses", "types"].map((filterType) =>
-                  filters[filterType as keyof typeof filters].map((value) => (
-                    <button
-                      key={`${filterType}-${value}`}
-                      onClick={() =>
-                        toggleFilter(
-                          filterType as keyof Omit<Filters, "difficulty">,
-                          value.toString()
-                        )
-                      }
-                      className={`px-3 py-1 rounded-full ${
-                        selectedFilters[
-                          filterType as keyof Omit<Filters, "difficulty">
-                        ].includes(value.toString())
-                          ? "bg-blue-500 text-white"
-                          : "bg-white text-gray-800"
-                      }`}
-                    >
-                      {value}
-                    </button>
-                  ))
-                )}
+          <div className="mb-4">
+            <form onSubmit={handleSearch} className="flex items-center">
+              <div className="flex-grow flex items-center bg-white rounded-l-lg overflow-hidden shadow-lg">
+                <SearchIcon className="text-gray-400 ml-6" size={30} />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Rechercher une recette..."
+                  className="flex-grow p-5 outline-none text-gray-700 text-xl"
+                />
               </div>
-            </div>
-            <div className="mb-4">
-              <h3 className="text-white mb-2">Difficulté</h3>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {filters.difficulties.map((value) => (
+              <button
+                type="button"
+                onClick={() => setIsSidebarOpen(true)}
+                className="bg-blue-500 hover:bg-blue-600 text-white p-5 rounded-r-lg transition-colors"
+              >
+                <SlidersHorizontal size={30} />
+              </button>
+            </form>
+          </div>
+
+          {activeFilters.length > 0 && (
+            <div className="mb-4 p-4 rounded-lg bg-opacity-90">
+              <div className="flex flex-wrap gap-2 items-center">
+                {activeFilters.map(({ type, value }) => (
                   <button
-                    key={`difficulty-${value}`}
-                    onClick={() => toggleDifficulty(value.toString())}
-                    className={`px-3 py-1 rounded-full ${
-                      selectedFilters.difficulty === value.toString()
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-gray-800"
-                    }`}
+                    key={`${type}-${value}`}
+                    onClick={() => removeFilter(type, value)}
+                    className="flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-base hover:bg-blue-200 transition-colors"
                   >
-                    {getDifficultyLabel(value as number)}
+                    {type === "difficulty"
+                      ? getDifficultyLabel(parseInt(value))
+                      : value}
+                    <X size={20} className="ml-2" />
                   </button>
                 ))}
+                <button
+                  onClick={clearAllFilters}
+                  className="text-base text-gray-600 hover:text-gray-800 transition-colors bg-gray-100 px-4 py-2 rounded-full"
+                >
+                  Effacer tous les filtres
+                </button>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -222,6 +248,18 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
             ))}
           </ul>
         )}
+      </div>
+
+      <div ref={sidebarRef}>
+        <FilterSidebar
+          filters={filters}
+          selectedFilters={selectedFilters}
+          toggleFilter={toggleFilter}
+          toggleDifficulty={toggleDifficulty}
+          getDifficultyLabel={getDifficultyLabel}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
       </div>
     </div>
   );
