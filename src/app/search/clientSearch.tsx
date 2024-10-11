@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { SearchIcon, SlidersHorizontal, X } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import FilterSidebar from "@/components/filterSidebar";
 import RecipeCard from "@/components/recipeCard";
 import { Recipe } from "@/types/recipe";
@@ -10,21 +10,28 @@ import { Filters } from "@/types/filters";
 
 interface ClientSearchProps {
   recipes: Recipe[];
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default function ClientSearch({ recipes }: ClientSearchProps) {
-  const searchParams = useSearchParams();
+export default function ClientSearch({
+  recipes,
+  searchParams,
+}: ClientSearchProps) {
+  const router = useRouter();
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const [searchTerm, setSearchTerm] = useState<string>(
-    searchParams.get("search") || ""
+    (searchParams.search as string) || ""
   );
   const [selectedFilters, setSelectedFilters] = useState<Filters>(() => ({
-    categories:
-      searchParams.get("categories")?.split(",").filter(Boolean) || [],
-    licenses: searchParams.get("licenses")?.split(",").filter(Boolean) || [],
-    types: searchParams.get("types")?.split(",").filter(Boolean) || [],
-    difficulty: searchParams.get("difficulty") || "",
+    categories: ((searchParams.categories as string) || "")
+      .split(",")
+      .filter(Boolean),
+    licenses: ((searchParams.licenses as string) || "")
+      .split(",")
+      .filter(Boolean),
+    types: ((searchParams.types as string) || "").split(",").filter(Boolean),
+    difficulty: (searchParams.difficulty as string) || "",
   }));
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -75,23 +82,20 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
   }, [recipes, searchTerm, selectedFilters]);
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams();
     if (searchTerm) params.set("search", searchTerm);
-    else params.delete("search");
 
     Object.entries(selectedFilters).forEach(([key, value]) => {
       if (Array.isArray(value) && value.length > 0) {
         params.set(key, value.join(","));
       } else if (typeof value === "string" && value) {
         params.set(key, value);
-      } else {
-        params.delete(key);
       }
     });
 
     const newUrl = `${window.location.pathname}?${params.toString()}`;
-    window.history.pushState(null, "", newUrl);
-  }, [searchTerm, selectedFilters, searchParams]);
+    router.push(newUrl, { scroll: false });
+  }, [searchTerm, selectedFilters, router]);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
