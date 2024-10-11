@@ -5,10 +5,6 @@ import Link from "next/link";
 import { Recipe } from "@/types/recipe";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
-
 interface HighlightRecipeProps {
   recipe: Recipe;
   onLeft: boolean;

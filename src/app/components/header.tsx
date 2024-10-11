@@ -2,9 +2,9 @@
 
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { SearchIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import TransitionLink from "./transitionLink";
 
 export default function Header() {
   const pathname = usePathname();
@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <header className="w-full px-8 py-4 flex items-center justify-between bg-gray-800 bg-opacity-70 fixed z-10 top-0 left-0">
-      <Link href="/" className="flex items-center w-1/5">
+      <TransitionLink url="/" className="flex items-center w-1/5">
         <Image
           src="/logo.png"
           alt="Logo"
@@ -20,12 +20,12 @@ export default function Header() {
           width={146}
           height={48}
         />
-      </Link>
+      </TransitionLink>
 
       {!isSearchPage && (
         <div className="flex-grow flex justify-center">
           <div className="w-3/5">
-            <Link href="/search" className="block relative">
+            <TransitionLink url="/search" className="block relative">
               <div className="relative flex items-center">
                 <SearchIcon
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -38,7 +38,7 @@ export default function Header() {
                   readOnly
                 />
               </div>
-            </Link>
+            </TransitionLink>
           </div>
         </div>
       )}
@@ -48,9 +48,12 @@ export default function Header() {
           isSearchPage ? "w-4/5 justify-end" : "w-1/5 justify-end"
         }`}
       >
-        <Link href="/contact" className="text-white hover:text-gray-200">
+        <TransitionLink
+          url="/contact"
+          className="text-white hover:text-gray-200"
+        >
           Contact
-        </Link>
+        </TransitionLink>
       </nav>
     </header>
   );

@@ -1,3 +1,5 @@
+import GSAP from "./lib/gsap";
+import PageTransition from "./utils/pageTransition";
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./components/header";
@@ -16,9 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
-        {children}
-        <Footer />
+        <PageTransition>
+          <GSAP>
+            <Header />
+            {children}
+            <Footer />
+          </GSAP>
+        </PageTransition>
       </body>
     </html>
   );
