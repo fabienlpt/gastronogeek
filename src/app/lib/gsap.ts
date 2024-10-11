@@ -6,7 +6,11 @@ import { CustomEase } from "gsap/CustomEase";
 import Flip from "gsap/Flip";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-export default function GSAP({ children }: any) {
+interface GSAPProps {
+  children: React.ReactNode;
+}
+
+export default function GSAP({ children }: GSAPProps) {
   gsap.registerPlugin(useGSAP, ScrollTrigger, CustomEase, Flip);
 
   useGSAP(() => {
