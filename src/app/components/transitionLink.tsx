@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useStore } from "@/lib/store";
 
 interface TransitionLinkProps {
@@ -17,10 +17,15 @@ export default function TransitionLink({
   className,
 }: TransitionLinkProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { isTransitionActive, setIsTransitionActive } = useStore();
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
+
+    if (url === pathname) {
+      return;
+    }
 
     if (isTransitionActive) return;
 
