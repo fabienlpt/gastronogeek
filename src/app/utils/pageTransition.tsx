@@ -3,7 +3,6 @@
 import React, { useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useStore } from "@/lib/store";
 
