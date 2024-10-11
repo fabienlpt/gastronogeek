@@ -47,14 +47,12 @@ const HighlightRecipe: React.FC<HighlightRecipeProps> = ({
         {
           x: "0%",
           opacity: 1,
-          duration: 3,
+          duration: 1.5,
           ease: "power3.out",
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top 80%",
-            end: "bottom center",
-            scrub: true,
-            toggleActions: "play reverse play reverse",
+            toggleActions: "play",
           },
         }
       );

@@ -20,7 +20,6 @@ function ClientHome({ recipes }: ClientHomeProps) {
 
   useGSAP(
     () => {
-      // Hero animation
       const heroText = new SplitType("#hero-title", { types: "words" });
       gsap.from(heroText.words, {
         opacity: 0,
