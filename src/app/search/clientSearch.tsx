@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { SearchIcon } from "lucide-react";
 import RecipeCard from "@/components/recipeCard";
 import { Recipe } from "@/types/recipe";
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface ClientSearchProps {
   recipes: Recipe[];
@@ -21,14 +21,16 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [searchTerm, setSearchTerm] = useState<string>(searchParams.get('search') || "");
-  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
-  const [selectedFilters, setSelectedFilters] = useState<Filters>({
-    categories: searchParams.get('categories')?.split(',') || [],
-    licenses: searchParams.get('licenses')?.split(',') || [],
-    types: searchParams.get('types')?.split(',') || [],
-    difficulty: searchParams.get('difficulty') || "",
-  });
+  const [searchTerm, setSearchTerm] = useState<string>(
+    searchParams.get("search") || ""
+  );
+  const [selectedFilters, setSelectedFilters] = useState<Filters>(() => ({
+    categories:
+      searchParams.get("categories")?.split(",").filter(Boolean) || [],
+    licenses: searchParams.get("licenses")?.split(",").filter(Boolean) || [],
+    types: searchParams.get("types")?.split(",").filter(Boolean) || [],
+    difficulty: searchParams.get("difficulty") || "",
+  }));
 
   const filters = useMemo(() => {
     const tempFilters = recipes.reduce(
@@ -55,6 +57,27 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
     };
   }, [recipes]);
 
+  const filteredRecipes = useMemo(() => {
+    return recipes.filter((recipe) => {
+      const matchesSearch =
+        searchTerm === "" ||
+        recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        recipe.commonTitle.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesFilters =
+        (selectedFilters.categories.length === 0 ||
+          selectedFilters.categories.includes(recipe.category)) &&
+        (selectedFilters.licenses.length === 0 ||
+          selectedFilters.licenses.includes(recipe.license)) &&
+        (selectedFilters.types.length === 0 ||
+          selectedFilters.types.includes(recipe.type)) &&
+        (selectedFilters.difficulty === "" ||
+          recipe.difficulty.toString() === selectedFilters.difficulty);
+
+      return matchesSearch && matchesFilters;
+    });
+  }, [recipes, searchTerm, selectedFilters]);
+
   const getDifficultyLabel = (difficulty: number): string => {
     switch (difficulty) {
       case 1:
@@ -69,31 +92,15 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
   };
 
   useEffect(() => {
-    const filtered = recipes.filter((recipe) => {
-      const matchesSearch =
-        searchTerm === "" ||
-        recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        recipe.commonTitle.toLowerCase().includes(searchTerm.toLowerCase());
-
-      const matchesFilters =
-        (selectedFilters.categories.length === 0 || selectedFilters.categories.includes(recipe.category)) &&
-        (selectedFilters.licenses.length === 0 || selectedFilters.licenses.includes(recipe.license)) &&
-        (selectedFilters.types.length === 0 || selectedFilters.types.includes(recipe.type)) &&
-        (selectedFilters.difficulty === "" || recipe.difficulty.toString() === selectedFilters.difficulty);
-
-      return matchesSearch && matchesFilters;
-    });
-    setFilteredRecipes(filtered);
-
     // Mise à jour de l'URL
     const params = new URLSearchParams(searchParams.toString());
-    if (searchTerm) params.set('search', searchTerm);
-    else params.delete('search');
-    
+    if (searchTerm) params.set("search", searchTerm);
+    else params.delete("search");
+
     Object.entries(selectedFilters).forEach(([key, value]) => {
       if (Array.isArray(value) && value.length > 0) {
-        params.set(key, value.join(','));
-      } else if (typeof value === 'string' && value) {
+        params.set(key, value.join(","));
+      } else if (typeof value === "string" && value) {
         params.set(key, value);
       } else {
         params.delete(key);
@@ -101,26 +108,29 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
     });
 
     const newUrl = `${window.location.pathname}?${params.toString()}`;
-    window.history.pushState(null, '', newUrl);
-  }, [recipes, searchTerm, selectedFilters, searchParams]);
+    window.history.pushState(null, "", newUrl);
+  }, [searchTerm, selectedFilters, searchParams]);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
-  const toggleFilter = (type: keyof Omit<Filters, 'difficulty'>, value: string) => {
-    setSelectedFilters(prev => ({
+  const toggleFilter = (
+    type: keyof Omit<Filters, "difficulty">,
+    value: string
+  ) => {
+    setSelectedFilters((prev) => ({
       ...prev,
       [type]: prev[type].includes(value)
-        ? prev[type].filter(item => item !== value)
-        : [...prev[type], value]
+        ? prev[type].filter((item) => item !== value)
+        : [...prev[type], value],
     }));
   };
 
   const toggleDifficulty = (value: string) => {
-    setSelectedFilters(prev => ({
+    setSelectedFilters((prev) => ({
       ...prev,
-      difficulty: prev.difficulty === value ? "" : value
+      difficulty: prev.difficulty === value ? "" : value,
     }));
   };
 
@@ -153,13 +163,20 @@ export default function ClientSearch({ recipes }: ClientSearchProps) {
             <div className="mb-4">
               <h3 className="text-white mb-2">Filtres</h3>
               <div className="flex flex-wrap gap-2 justify-center">
-                {['categories', 'licenses', 'types'].map(filterType => 
+                {["categories", "licenses", "types"].map((filterType) =>
                   filters[filterType as keyof typeof filters].map((value) => (
                     <button
                       key={`${filterType}-${value}`}
-                      onClick={() => toggleFilter(filterType as keyof Omit<Filters, 'difficulty'>, value.toString())}
+                      onClick={() =>
+                        toggleFilter(
+                          filterType as keyof Omit<Filters, "difficulty">,
+                          value.toString()
+                        )
+                      }
                       className={`px-3 py-1 rounded-full ${
-                        selectedFilters[filterType as keyof Omit<Filters, 'difficulty'>].includes(value.toString())
+                        selectedFilters[
+                          filterType as keyof Omit<Filters, "difficulty">
+                        ].includes(value.toString())
                           ? "bg-blue-500 text-white"
                           : "bg-white text-gray-800"
                       }`}
