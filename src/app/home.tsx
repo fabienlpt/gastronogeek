@@ -48,7 +48,7 @@ function ClientHome({ recipes }: ClientHomeProps) {
   );
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-x-hidden">
       <section
         ref={heroRef}
         className="relative h-screen w-full flex items-center justify-center mb-12 bg-cover bg-center"
@@ -57,7 +57,7 @@ function ClientHome({ recipes }: ClientHomeProps) {
         <div className="absolute inset-0 bg-gray-800 opacity-40"></div>
         <h1
           id="hero-title"
-          className="text-5xl font-bold text-white text-center z-10 px-4"
+          className="text-5xl font-bold text-white text-center z-1 px-4"
         >
           Bienvenue sur Gastronogeek
         </h1>

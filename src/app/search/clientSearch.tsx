@@ -193,7 +193,7 @@ export default function ClientSearch({
         className="relative h-screen w-full flex items-center justify-center mb-12 bg-cover bg-center"
         style={{ backgroundImage: "url('/search_banner.jpg')" }}
       >
-        <div className="z-10 text-center w-full max-w-[60%] mx-auto px-4">
+        <div className="z-1 text-center w-full max-w-[60%] mx-auto px-4">
           <h1 className="text-5xl font-bold text-white mb-8">
             Découvrez nos recettes
           </h1>
