@@ -8,7 +8,7 @@ import { Recipe } from "@/types/recipe";
 
 export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -51,33 +51,37 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
           "-=0.4"
         );
 
-      gsap.utils.toArray(".fade-in").forEach((element: any) => {
-        gsap.from(element, {
-          opacity: 0,
-          y: 50,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: element,
-            start: "top 80%",
-            end: "bottom 20%",
-            toggleActions: "play none none reverse",
-          },
-        });
+      gsap.utils.toArray(".fade-in").forEach((element) => {
+        if (element instanceof HTMLElement) {
+          gsap.from(element, {
+            opacity: 0,
+            y: 50,
+            duration: 0.8,
+            scrollTrigger: {
+              trigger: element,
+              start: "top 80%",
+              end: "bottom 20%",
+              toggleActions: "play none none reverse",
+            },
+          });
+        }
       });
 
-      gsap.utils.toArray(".stagger-fade").forEach((element: any) => {
-        gsap.from(element.children, {
-          opacity: 0,
-          y: 20,
-          duration: 0.5,
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: element,
-            start: "top 80%",
-            end: "bottom 20%",
-            toggleActions: "play none none reverse",
-          },
-        });
+      gsap.utils.toArray(".stagger-fade").forEach((element) => {
+        if (element instanceof HTMLElement) {
+          gsap.from(element.children, {
+            opacity: 0,
+            y: 20,
+            duration: 0.5,
+            stagger: 0.1,
+            scrollTrigger: {
+              trigger: element,
+              start: "top 80%",
+              end: "bottom 20%",
+              toggleActions: "play none none reverse",
+            },
+          });
+        }
       });
     },
     { scope: containerRef }
