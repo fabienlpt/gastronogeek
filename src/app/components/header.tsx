@@ -57,7 +57,7 @@ export default function Header() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm) {
-      router.push(`/search?q=${encodeURIComponent(searchTerm)}`);
+      router.push(`/recipes?q=${encodeURIComponent(searchTerm)}`);
       setIsSearching(false);
     }
   };
@@ -75,7 +75,7 @@ export default function Header() {
       </TransitionLink>
 
       <div className="flex-grow flex justify-center" ref={searchRef}>
-        <div className="w-3/5 relative">
+        <div className="w-4/5 relative">
           <form onSubmit={handleSubmit}>
             <div className="relative flex items-center">
               {isLoading ? (
@@ -128,6 +128,12 @@ export default function Header() {
       </div>
 
       <nav className="flex space-x-4 w-1/5 justify-end">
+        <TransitionLink
+          url="/recipes"
+          className="text-white hover:text-gray-200"
+        >
+          Recettes
+        </TransitionLink>
         <TransitionLink
           url="/contact"
           className="text-white hover:text-gray-200"

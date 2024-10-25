@@ -84,7 +84,7 @@ export default function SearchResults({
 
       {hasMoreResults && (
         <TransitionLink
-          url={`/search?q=${encodeURIComponent(searchTerm)}`}
+          url={`/recipes?q=${encodeURIComponent(searchTerm)}`}
           className="block p-4 text-center text-blue-600 hover:bg-blue-50 transition-colors border-t border-gray-200"
           onClick={onClose}
         >
