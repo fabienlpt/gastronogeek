@@ -2,10 +2,10 @@
 
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Recipe } from "@/types/recipe";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import TransitionLink from "./transitionLink";
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -58,7 +58,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
   );
 
   return (
-    <Link href={`/recipes/${recipe.slug}`} className="block">
+    <TransitionLink url={`/recipes/${recipe.slug}`} className="block">
       <div
         ref={containerRef}
         className="relative w-full h-64 rounded-lg overflow-hidden group"
@@ -117,7 +117,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
           </div>
         </div>
       </div>
-    </Link>
+    </TransitionLink>
   );
 };
 

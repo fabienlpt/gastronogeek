@@ -1,6 +1,6 @@
 import React from "react";
-import Link from "next/link";
 import { Facebook, Twitter, Instagram, Mail } from "lucide-react";
+import TransitionLink from "./transitionLink";
 
 const Footer = () => {
   return (
@@ -19,19 +19,25 @@ const Footer = () => {
             <h3 className="text-lg font-semibold">Liens rapides</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-sm hover:text-gray-300">
+                <TransitionLink url="/" className="text-sm hover:text-gray-300">
                   Accueil
-                </Link>
+                </TransitionLink>
               </li>
               <li>
-                <Link href="/search" className="text-sm hover:text-gray-300">
+                <TransitionLink
+                  url="/search"
+                  className="text-sm hover:text-gray-300"
+                >
                   Recettes
-                </Link>
+                </TransitionLink>
               </li>
               <li>
-                <Link href="/contact" className="text-sm hover:text-gray-300">
+                <TransitionLink
+                  url="/contact"
+                  className="text-sm hover:text-gray-300"
+                >
                   Contact
-                </Link>
+                </TransitionLink>
               </li>
             </ul>
           </div>
@@ -40,28 +46,28 @@ const Footer = () => {
             <h3 className="text-lg font-semibold">Catégories</h3>
             <ul className="space-y-2">
               <li>
-                <Link
-                  href="search?types=Entrée"
+                <TransitionLink
+                  url="/search?types=Entrée"
                   className="text-sm hover:text-gray-300"
                 >
                   Entrées
-                </Link>
+                </TransitionLink>
               </li>
               <li>
-                <Link
-                  href="search?types=Plat"
+                <TransitionLink
+                  url="/search?types=Plat"
                   className="text-sm hover:text-gray-300"
                 >
                   Plats principaux
-                </Link>
+                </TransitionLink>
               </li>
               <li>
-                <Link
-                  href="search?types=Dessert"
+                <TransitionLink
+                  url="/search?types=Dessert"
                   className="text-sm hover:text-gray-300"
                 >
                   Desserts
-                </Link>
+                </TransitionLink>
               </li>
             </ul>
           </div>
