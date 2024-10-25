@@ -124,7 +124,7 @@ function ClientHome({ recipes }: ClientHomeProps) {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full overflow-x-hidden">
+    <div ref={containerRef} className="w-full overflow-x-hidden mb-28">
       <section
         className="relative h-screen w-full flex items-center justify-center mb-12 bg-cover bg-center"
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
@@ -173,7 +173,7 @@ function ClientHome({ recipes }: ClientHomeProps) {
           <h2 className="highlight-title text-3xl font-bold mb-12">
             Recettes mises en avant
           </h2>
-          <div className="flex flex-col gap-14 mb-28">
+          <div className="flex flex-col gap-14">
             {highlightedRecipes.map((recipe, index) => (
               <div key={recipe.slug} className="highlight-recipe">
                 <HighlightRecipe recipe={recipe} onLeft={index % 2 === 0} />

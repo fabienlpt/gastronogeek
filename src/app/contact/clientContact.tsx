@@ -78,7 +78,7 @@ export default function ContactClient() {
   };
 
   return (
-    <div ref={containerRef} className="container mx-auto p-4 pt-20">
+    <div ref={containerRef} className="container mx-auto mb-28 pt-20">
       <h1 className="contact-title text-4xl font-bold mb-2 text-center">
         Contactez-nous
       </h1>

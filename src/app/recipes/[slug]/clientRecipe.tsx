@@ -144,7 +144,7 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
   }
 
   return (
-    <div ref={containerRef} className="container mx-auto p-4 pt-20">
+    <div ref={containerRef} className="container mx-auto pt-20 mb-28">
       <h1 className="recipe-title text-4xl font-bold mb-2 text-center">
         {recipe.title}
       </h1>
