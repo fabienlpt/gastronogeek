@@ -93,8 +93,8 @@ function ClientHome({ recipes }: ClientHomeProps) {
         </section>
 
         <section>
-          <h2 className="text-3xl font-bold mb-6">Recettes mises en avant</h2>
-          <div className="flex flex-col space-y-12">
+          <h2 className="text-3xl font-bold mb-12">Recettes mises en avant</h2>
+          <div className="flex flex-col gap-14 mb-28">
             {highlightedRecipes.map((recipe, index) => (
               <HighlightRecipe
                 key={recipe.slug}

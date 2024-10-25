@@ -43,7 +43,6 @@ export default function PageTransition({ children }: PageTransitionProps) {
   }, [isTransitionActive]);
 
   useEffect(() => {
-    // Déclencher l'animation de sortie après le chargement de la page
     if (!isFirstLoad) {
       animateTransition(false);
     }

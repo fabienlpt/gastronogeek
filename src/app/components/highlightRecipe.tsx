@@ -60,7 +60,7 @@ const HighlightRecipe: React.FC<HighlightRecipeProps> = ({
     <Link href={`/recipes/${recipe.slug}`} className="block">
       <div
         ref={containerRef}
-        className={`relative flex w-full h-96 py-4 group ${
+        className={`relative flex w-full h-96 group ${
           onLeft ? "flex-row" : "flex-row-reverse"
         }`}
       >
