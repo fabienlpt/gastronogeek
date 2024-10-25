@@ -9,12 +9,14 @@ interface TransitionLinkProps {
   url: string;
   children: React.ReactNode;
   className?: string;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
 export default function TransitionLink({
   url,
   children,
   className,
+  onClick,
 }: TransitionLinkProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -25,6 +27,10 @@ export default function TransitionLink({
 
     if (url === pathname) {
       return;
+    }
+
+    if (onClick) {
+      onClick(e);
     }
 
     if (isTransitionActive) return;

@@ -21,3 +21,14 @@ export async function getRecipe(slug: string): Promise<Recipe> {
 
   return res.json();
 }
+
+export async function searchRecipes(query: string): Promise<Recipe[]> {
+  const recipes = await getRecipes();
+  const searchTerm = query.toLowerCase();
+
+  return recipes.filter(
+    (recipe) =>
+      recipe.title.toLowerCase().includes(searchTerm) ||
+      recipe.commonTitle.toLowerCase().includes(searchTerm)
+  );
+}
