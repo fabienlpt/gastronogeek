@@ -1,25 +1,34 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Recipe } from "@/types/recipe";
+import { useStore } from "@/lib/store";
 
 export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { setIsTransitionActive } = useStore();
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   useGSAP(
     () => {
-      const tl = gsap.timeline();
+      const masterTimeline = gsap.timeline({
+        paused: true,
+        onComplete: () => setIsTransitionActive(false),
+      });
 
-      tl.from(".recipe-title", {
-        opacity: 0,
-        y: 50,
-        duration: 0.8,
-        ease: "power3.out",
-      })
+      timelineRef.current = masterTimeline;
+
+      masterTimeline
+        .from(".recipe-title", {
+          opacity: 0,
+          y: 50,
+          duration: 0.8,
+          ease: "power3.out",
+        })
         .from(
           ".recipe-subtitle",
           {
@@ -49,43 +58,86 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
             ease: "power3.out",
           },
           "-=0.4"
-        );
-
-      gsap.utils.toArray(".fade-in").forEach((element) => {
-        if (element instanceof HTMLElement) {
-          gsap.from(element, {
+        )
+        .from(
+          ".recipe-info",
+          {
             opacity: 0,
-            y: 50,
+            y: 30,
             duration: 0.8,
-            scrollTrigger: {
-              trigger: element,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play none none reverse",
-            },
-          });
-        }
-      });
-
-      gsap.utils.toArray(".stagger-fade").forEach((element) => {
-        if (element instanceof HTMLElement) {
-          gsap.from(element.children, {
+            ease: "power3.out",
+          },
+          "-=0.4"
+        )
+        .from(
+          ".ingredients-section",
+          {
+            opacity: 0,
+            y: 30,
+            duration: 0.8,
+            ease: "power3.out",
+          },
+          "-=0.6"
+        )
+        .from(
+          ".ingredient-item",
+          {
             opacity: 0,
             y: 20,
             duration: 0.5,
             stagger: 0.1,
-            scrollTrigger: {
-              trigger: element,
-              start: "top 80%",
-              end: "bottom 20%",
-              toggleActions: "play none none reverse",
-            },
-          });
-        }
-      });
+            ease: "power3.out",
+          },
+          "-=0.4"
+        )
+        .from(
+          ".preparation-section",
+          {
+            opacity: 0,
+            y: 30,
+            duration: 0.8,
+            ease: "power3.out",
+          },
+          "-=0.6"
+        )
+        .from(
+          ".step-item",
+          {
+            opacity: 0,
+            y: 20,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: "power3.out",
+          },
+          "-=0.4"
+        );
+
+      if (recipe.dressing || recipe.desc) {
+        masterTimeline.from(
+          ".additional-info",
+          {
+            opacity: 0,
+            y: 30,
+            duration: 0.8,
+            ease: "power3.out",
+          },
+          "-=0.4"
+        );
+      }
+
+      masterTimeline.play();
     },
     { scope: containerRef }
   );
+
+  useEffect(() => {
+    return () => {
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+      }
+      gsap.killTweensOf(containerRef.current);
+    };
+  }, []);
 
   if (!recipe) {
     return <div>Recipe not found</div>;
@@ -140,7 +192,7 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
             </>
           )}
 
-          <div className="fade-in bg-gray-100 p-6 rounded-lg shadow-md">
+          <div className="recipe-info bg-gray-100 p-6 rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4">Informations</h2>
             <div className="grid grid-cols-2 gap-4">
               <p>
@@ -181,11 +233,11 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
         </div>
 
         <div>
-          <div className="fade-in bg-gray-100 p-6 rounded-lg shadow-md mb-8">
+          <div className="ingredients-section bg-gray-100 p-6 rounded-lg shadow-md mb-8">
             <h2 className="text-2xl font-semibold mb-4">Ingrédients</h2>
-            <ul className="stagger-fade space-y-2">
+            <ul className="space-y-2">
               {recipe.ingredients.map((ingredient, index) => (
-                <li key={index} className="flex items-center">
+                <li key={index} className="ingredient-item flex items-center">
                   <span className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center mr-3">
                     {index + 1}
                   </span>
@@ -197,11 +249,11 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
             </ul>
           </div>
 
-          <div className="fade-in bg-gray-100 p-6 rounded-lg shadow-md">
+          <div className="preparation-section bg-gray-100 p-6 rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4">Préparation</h2>
-            <ol className="stagger-fade space-y-4">
+            <ol className="space-y-4">
               {recipe.steps.map((step, index) => (
-                <li key={index} className="flex">
+                <li key={index} className="step-item flex">
                   <span className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-1">
                     {index + 1}
                   </span>
@@ -214,7 +266,7 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
       </div>
 
       {(recipe.dressing || recipe.desc) && (
-        <div className="fade-in mt-12 bg-gray-100 p-6 rounded-lg shadow-md">
+        <div className="additional-info mt-12 bg-gray-100 p-6 rounded-lg shadow-md">
           {recipe.dressing && (
             <>
               <h2 className="text-2xl font-semibold mb-4">Dressage</h2>
