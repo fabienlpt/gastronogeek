@@ -82,7 +82,7 @@ function ClientHome({ recipes }: ClientHomeProps) {
             </div>
             <div className="md:w-1/2">
               <Image
-                src="/images/gastronogeek-collage.jpg"
+                src="/a-propos.jpg"
                 alt="Collage de plats Gastronogeek"
                 width={600}
                 height={400}
