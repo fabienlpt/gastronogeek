@@ -18,13 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <PageTransition>
-          <GSAP>
+        <GSAP>
+          <PageTransition>
             <Header />
             {children}
             <Footer />
-          </GSAP>
-        </PageTransition>
+          </PageTransition>
+        </GSAP>
       </body>
     </html>
   );

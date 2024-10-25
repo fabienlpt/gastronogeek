@@ -188,7 +188,7 @@ export default function ClientSearch({
   }, []);
 
   return (
-    <div className="w-full mb-4">
+    <div className="w-full mb-28">
       <section
         className="relative h-screen w-full flex items-center justify-center mb-12 bg-cover bg-center"
         style={{ backgroundImage: "url('/search_banner.jpg')" }}
