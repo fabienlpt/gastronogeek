@@ -83,7 +83,7 @@ export default function ContactClient() {
         Contactez-nous
       </h1>
       <p className="contact-subtitle text-xl text-gray-600 mb-12 text-center">
-        Une question, une suggestion ? N'hésitez pas à nous écrire !
+        Une question, une suggestion ? N&apos;hésitez pas à nous écrire !
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
