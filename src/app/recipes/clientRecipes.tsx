@@ -82,6 +82,19 @@ export default function ClientRecipes({
   }, [recipes, searchParams.q, selectedFilters]);
 
   useEffect(() => {
+    setSelectedFilters({
+      categories: ((searchParams.categories as string) || "")
+        .split(",")
+        .filter(Boolean),
+      licenses: ((searchParams.licenses as string) || "")
+        .split(",")
+        .filter(Boolean),
+      types: ((searchParams.types as string) || "").split(",").filter(Boolean),
+      difficulty: (searchParams.difficulty as string) || "",
+    });
+  }, [searchParams]);
+
+  useEffect(() => {
     const params = new URLSearchParams();
     if (searchParams.q) params.set("q", searchParams.q as string);
 
