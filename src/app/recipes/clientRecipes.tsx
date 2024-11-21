@@ -243,9 +243,11 @@ export default function ClientRecipes({
         <FilterSidebar
           filters={filters}
           selectedFilters={selectedFilters}
+          activeFilters={activeFilters}
           toggleFilter={toggleFilter}
           toggleDifficulty={toggleDifficulty}
           getDifficultyLabel={getDifficultyLabel}
+          clearAllFilters={clearAllFilters}
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
         />

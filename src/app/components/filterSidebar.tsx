@@ -10,12 +10,14 @@ interface FilterSidebarProps {
     difficulties: number[];
   };
   selectedFilters: Filters;
+  activeFilters: string[];
   toggleFilter: (
     type: keyof Omit<Filters, "difficulty">,
     value: string
   ) => void;
   toggleDifficulty: (value: string) => void;
   getDifficultyLabel: (difficulty: number) => string;
+  clearAllFilters: () => void;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -23,9 +25,11 @@ interface FilterSidebarProps {
 export default function FilterSidebar({
   filters,
   selectedFilters,
+  activeFilters,
   toggleFilter,
   toggleDifficulty,
   getDifficultyLabel,
+  clearAllFilters,
   isOpen,
   onClose,
 }: FilterSidebarProps) {
@@ -89,6 +93,16 @@ export default function FilterSidebar({
               </div>
             </div>
           ))}
+          {activeFilters.length > 0 && (
+            <div className="mb-8">
+              <button
+                onClick={clearAllFilters}
+                className="text-sm text-gray-100 transition-colors bg-red-700 hover:bg-red-500 px-4 py-2 rounded-full m-auto block"
+              >
+                Effacer tous les filtres
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
