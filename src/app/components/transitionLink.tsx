@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/store";
+import Link from "next/link";
 
 interface TransitionLinkProps {
   url: string;
@@ -19,27 +19,19 @@ export default function TransitionLink({
   onClick,
 }: TransitionLinkProps) {
   const router = useRouter();
-  const pathname = usePathname();
-  const { isTransitionActive, setIsTransitionActive } = useStore();
+  const setIsTransitionActive = useStore(
+    (state) => state.setIsTransitionActive
+  );
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-
-    if (url === pathname) {
-      return;
-    }
-
-    if (onClick) {
-      onClick(e);
-    }
-
-    if (isTransitionActive) return;
+    if (onClick) onClick(e);
 
     setIsTransitionActive(true);
 
     setTimeout(() => {
       router.push(url);
-    }, 600);
+    }, 400);
   };
 
   return (

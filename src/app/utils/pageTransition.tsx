@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import TransitionOverlay from "./transitionOverlay";
 import { useStore } from "@/lib/store";
 
 interface PageTransitionProps {
@@ -12,59 +12,52 @@ interface PageTransitionProps {
 
 export default function PageTransition({ children }: PageTransitionProps) {
   const pathname = usePathname();
-  const refTransition = useRef<HTMLDivElement>(null);
-  const {
-    isTransitionActive,
-    setIsTransitionActive,
-    isFirstLoad,
-    setIsFirstLoad,
-  } = useStore();
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  const animateTransition = (show: boolean) => {
-    if (refTransition.current) {
-      gsap.to(refTransition.current, {
-        opacity: show ? 1 : 0,
-        duration: 0.6,
-        ease: "power2.inOut",
-        onComplete: () => {
-          setIsTransitionActive(false);
-          if (!show) {
-            setIsFirstLoad(false);
-          }
-        },
-      });
-    }
-  };
+  const { isTransitionActive, setIsTransitionActive } = useStore();
 
   useEffect(() => {
-    if (isTransitionActive) {
-      animateTransition(true);
-    }
-  }, [isTransitionActive]);
+    const ctx = gsap.context(() => {
+      gsap.set(overlayRef.current, { scaleY: 0 });
+    });
 
-  useEffect(() => {
-    if (!isFirstLoad) {
-      animateTransition(false);
-    }
-  }, [pathname]);
-
-  useEffect(() => {
-    if (isFirstLoad) {
-      if (refTransition.current) {
-        gsap.set(refTransition.current, { opacity: 1 });
-      }
-      animateTransition(false);
-    }
+    return () => ctx.revert();
   }, []);
 
   useEffect(() => {
-    ScrollTrigger.refresh();
-  }, [pathname]);
+    if (!isTransitionActive) return;
+
+    const tl = gsap.timeline();
+
+    tl.fromTo(
+      overlayRef.current,
+      { scaleY: 0 },
+      {
+        scaleY: 1,
+        duration: 0.4,
+        transformOrigin: "top",
+        ease: "power4.inOut",
+      }
+    )
+      .to(overlayRef.current, {
+        scaleY: 0,
+        duration: 0.4,
+        transformOrigin: "bottom",
+        ease: "power4.inOut",
+        delay: 0.2,
+      })
+      .call(() => {
+        setIsTransitionActive(false);
+      });
+  }, [isTransitionActive]);
 
   return (
     <>
-      <div key={pathname}>{children}</div>
-      <div ref={refTransition} className="transition"></div>
+      <div key={pathname} ref={contentRef}>
+        {children}
+      </div>
+      <TransitionOverlay ref={overlayRef} />
     </>
   );
 }
