@@ -114,7 +114,7 @@ const HighlightRecipe: React.FC<HighlightRecipeProps> = ({
                 {recipe.type}
               </span>
               <span
-                className={`text-sm font-semibold px-2 py-1 rounded-full ${
+                className={`text-sm font-semibold px-4 py-2 rounded-full ${
                   recipe.difficulty === 1
                     ? "bg-green-500 text-white"
                     : recipe.difficulty === 2

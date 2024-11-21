@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Clock, ChefHat, Loader2 } from "lucide-react";
+import { Clock, Loader2 } from "lucide-react";
 import type { Recipe } from "@/types/recipe";
 import TransitionLink from "./transitionLink";
 
@@ -30,6 +30,19 @@ export default function SearchResults({
       </div>
     );
   }
+
+  const getDifficultyLabel = (difficulty: number): string => {
+    switch (difficulty) {
+      case 1:
+        return "Facile";
+      case 2:
+        return "Intermédiaire";
+      case 3:
+        return "Difficile";
+      default:
+        return "Inconnu";
+    }
+  };
 
   return (
     <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200">
@@ -72,8 +85,17 @@ export default function SearchResults({
                     {recipe.prepTime}
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
-                    <ChefHat size={16} className="mr-1" />
-                    {recipe.difficulty}/3
+                    <span
+                      className={`text-xs font-semibold px-4 py-2 rounded-full ${
+                        recipe.difficulty === 1
+                          ? "bg-green-500 text-white"
+                          : recipe.difficulty === 2
+                          ? "bg-yellow-500 text-white"
+                          : "bg-red-500 text-white"
+                      }`}
+                    >
+                      {getDifficultyLabel(recipe.difficulty)}
+                    </span>
                   </div>
                 </div>
               </div>

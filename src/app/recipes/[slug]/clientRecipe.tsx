@@ -148,6 +148,19 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
     return <div>Recipe not found</div>;
   }
 
+  const getDifficultyLabel = (difficulty: number): string => {
+    switch (difficulty) {
+      case 1:
+        return "Facile";
+      case 2:
+        return "Intermédiaire";
+      case 3:
+        return "Difficile";
+      default:
+        return "Inconnu";
+    }
+  };
+
   return (
     <div ref={containerRef} className="container mx-auto pt-20 mb-28">
       <h1 className="recipe-title text-4xl font-bold mb-2 text-center">
@@ -212,7 +225,7 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
               </p>
               <p>
                 <span className="font-medium">Difficulté:</span>{" "}
-                {recipe.difficulty}
+                {getDifficultyLabel(recipe.difficulty)}
               </p>
               <p>
                 <span className="font-medium">Préparation:</span>{" "}
