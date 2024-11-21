@@ -56,7 +56,7 @@ export default function SearchResults({
                   src={recipe.images[0]}
                   alt={recipe.title}
                   fill
-                  className="object-cover rounded-lg"
+                  className="object-cover rounded-lg recipe-img"
                 />
               </div>
               <div className="flex-grow min-w-0">

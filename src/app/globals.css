@@ -13,3 +13,7 @@
   pointer-events: none;
   z-index: 9999;
 }
+
+.recipe-img {
+  filter: brightness(0.9) saturate(1.5);
+}

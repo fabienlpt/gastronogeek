@@ -76,6 +76,7 @@ const HighlightRecipe: React.FC<HighlightRecipeProps> = ({
               layout="fill"
               objectFit="cover"
               loading="lazy"
+              className="recipe-img"
             />
           ) : (
             <div className="w-full h-full bg-gray-200 flex items-center justify-center">

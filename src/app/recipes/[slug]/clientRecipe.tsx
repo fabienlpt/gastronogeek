@@ -162,7 +162,7 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
                   alt={recipe.title}
                   layout="fill"
                   objectFit="cover"
-                  className="rounded-lg"
+                  className="rounded-lg recipe-img"
                 />
               </div>
               <div className="image-thumbnails flex space-x-2 mb-4">
@@ -177,7 +177,7 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
                       alt={`${recipe.title} - Image ${index + 1}`}
                       layout="fill"
                       objectFit="cover"
-                      className="rounded-md"
+                      className="rounded-md recipe-img"
                     />
                     {index === 2 && recipe.images.length > 4 && (
                       <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-md">
