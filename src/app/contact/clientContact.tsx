@@ -96,7 +96,7 @@ export default function ContactClient() {
               </div>
               <div>
                 <h3 className="font-semibold text-lg">Email</h3>
-                <p className="text-gray-600">contact@example.com</p>
+                <p className="text-gray-600">lapertfabien@gmail.com</p>
               </div>
             </div>
 
@@ -106,7 +106,7 @@ export default function ContactClient() {
               </div>
               <div>
                 <h3 className="font-semibold text-lg">Téléphone</h3>
-                <p className="text-gray-600">+33 1 23 45 67 89</p>
+                <p className="text-gray-600">+33 6 78 91 23</p>
               </div>
             </div>
 
@@ -117,9 +117,9 @@ export default function ContactClient() {
               <div>
                 <h3 className="font-semibold text-lg">Adresse</h3>
                 <p className="text-gray-600">
-                  123 Rue Example
+                  21 Rue du Molinel,
                   <br />
-                  75000 Paris, France
+                  59000 Lille
                 </p>
               </div>
             </div>
