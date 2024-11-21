@@ -9,6 +9,7 @@ import { useStore } from "@/lib/store";
 
 export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [nbPersons, setNbPersons] = useState(recipe.defaultPersons);
   const containerRef = useRef<HTMLDivElement>(null);
   const { setIsTransitionActive } = useStore();
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
@@ -139,6 +140,10 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
     };
   }, []);
 
+  function getQuantity(quantity: number) {
+    return (quantity / recipe.defaultPersons) * nbPersons;
+  }
+
   if (!recipe) {
     return <div>Recipe not found</div>;
   }
@@ -226,7 +231,13 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
               )}
               <p>
                 <span className="font-medium">Pour:</span>{" "}
-                {recipe.defaultPersons} personnes
+                <input
+                  type="number"
+                  value={nbPersons}
+                  onChange={(e) => setNbPersons(parseInt(e.target.value))}
+                  className="w-12 h-8 text-center border border-gray-300 rounded-md"
+                />{" "}
+                personne{nbPersons > 1 && "s"}
               </p>
             </div>
           </div>
@@ -241,7 +252,8 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
                   <span className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center mr-3">
                     {index + 1}
                   </span>
-                  {ingredient.quantity && `${ingredient.quantity} `}
+                  {ingredient.quantity &&
+                    `${getQuantity(ingredient.quantity)} `}
                   {ingredient.unit && `${ingredient.unit} `}
                   {ingredient.name}
                 </li>
