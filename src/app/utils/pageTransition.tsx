@@ -45,7 +45,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
         duration: 0.4,
         transformOrigin: "bottom",
         ease: "power4.inOut",
-        delay: 0.2,
+        delay: 0.6,
       })
       .call(() => {
         setIsTransitionActive(false);
