@@ -198,7 +198,7 @@ export default function ClientRecipes({
               ? `Résultats pour "${searchParams.q}"`
               : "Toutes nos recettes"}
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-400 mt-2">
             {filteredRecipes.length} recette
             {filteredRecipes.length > 1 ? "s" : ""} trouvée
             {filteredRecipes.length > 1 ? "s" : ""}
@@ -206,7 +206,7 @@ export default function ClientRecipes({
         </div>
         <button
           onClick={() => setIsSidebarOpen(true)}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+          className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
         >
           <SlidersHorizontal size={20} />
           <span>Filtrer</span>
