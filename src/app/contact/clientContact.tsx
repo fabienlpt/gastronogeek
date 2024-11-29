@@ -82,21 +82,21 @@ export default function ContactClient() {
       <h1 className="contact-title text-4xl font-bold mb-2 text-center">
         Contactez-nous
       </h1>
-      <p className="contact-subtitle text-xl text-gray-600 mb-12 text-center">
+      <p className="contact-subtitle text-xl text-gray-400 mb-12 text-center">
         Une question, une suggestion ? N&apos;hésitez pas à nous écrire !
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-        <div className="contact-info bg-gray-100 p-8 rounded-lg shadow-md h-full">
+        <div className="contact-info bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-8 rounded-lg shadow-md h-full">
           <h2 className="text-2xl font-semibold mb-6">Informations</h2>
           <div className="space-y-6">
             <div className="info-item flex items-start space-x-4">
-              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
                 <Mail className="w-5 h-5 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold text-lg">Email</h3>
-                <p className="text-gray-600">lapertfabien@gmail.com</p>
+                <p className="text-gray-200">lapertfabien@gmail.com</p>
               </div>
             </div>
 
@@ -106,7 +106,7 @@ export default function ContactClient() {
               </div>
               <div>
                 <h3 className="font-semibold text-lg">Téléphone</h3>
-                <p className="text-gray-600">+33 6 78 91 23</p>
+                <p className="text-gray-200">+33 6 78 91 23</p>
               </div>
             </div>
 
@@ -116,7 +116,7 @@ export default function ContactClient() {
               </div>
               <div>
                 <h3 className="font-semibold text-lg">Adresse</h3>
-                <p className="text-gray-600">
+                <p className="text-gray-200">
                   21 Rue du Molinel,
                   <br />
                   59000 Lille
@@ -129,13 +129,13 @@ export default function ContactClient() {
         <div className="contact-form">
           <form
             onSubmit={handleSubmit}
-            className="bg-gray-100 p-8 rounded-lg shadow-md"
+            className="bg-purple-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-8 rounded-lg shadow-md"
           >
             <div className="space-y-6">
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-gray-200 mb-1"
                 >
                   Nom complet
                 </label>
@@ -151,7 +151,7 @@ export default function ContactClient() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-gray-200 mb-1"
                 >
                   Email
                 </label>
@@ -167,7 +167,7 @@ export default function ContactClient() {
               <div>
                 <label
                   htmlFor="subject"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-gray-200 mb-1"
                 >
                   Sujet
                 </label>
@@ -183,7 +183,7 @@ export default function ContactClient() {
               <div>
                 <label
                   htmlFor="message"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-gray-200 mb-1"
                 >
                   Message
                 </label>
@@ -198,7 +198,7 @@ export default function ContactClient() {
 
               <button
                 type="submit"
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors duration-200 flex items-center justify-center space-x-2"
+                className="w-full bg-cyan-500 text-white py-2 px-4 rounded-md hover:bg-cyan-600 transition-colors duration-200 flex items-center justify-center space-x-2"
               >
                 <span>Envoyer</span>
                 <Send className="w-4 h-4" />

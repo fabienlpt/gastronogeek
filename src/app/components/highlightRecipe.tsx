@@ -86,10 +86,10 @@ const HighlightRecipe: React.FC<HighlightRecipeProps> = ({
         </div>
         <div
           ref={contentRef}
-          className={`recipe-content w-1/2 h-full from-gray-800/90 to-gray-800/60 p-4 flex flex-col justify-between overflow-hidden ${
+          className={`recipe-content w-1/2 h-full p-4 flex flex-col justify-between overflow-hidden ${
             onLeft
-              ? "rounded-r-lg bg-gradient-to-l"
-              : "rounded-l-lg bg-gradient-to-r"
+              ? "rounded-r-lg bg-[linear-gradient(225deg,_rgba(8,145,178,0.8)_0%,_rgba(8,145,178,0.6)_20%,_#1E293B_100%)] "
+              : "rounded-l-lg bg-[linear-gradient(135deg,_rgba(168,85,247,0.8)_0%,_rgba(168,85,247,0.6)_20%,_#1e293b_100%)]"
           }`}
         >
           <div>

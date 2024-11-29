@@ -4,7 +4,7 @@ import TransitionLink from "./transitionLink";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white bottom-0">
+    <footer className="bg-slate-800  text-white bottom-0">
       <div className="max-w-6xl mx-auto px-4 py-10 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">

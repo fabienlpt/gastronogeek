@@ -63,7 +63,7 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full px-8 py-4 flex items-center justify-between bg-gray-800 bg-opacity-70 fixed z-10 top-0 left-0">
+    <header className="w-full px-8 py-4 flex items-center justify-between bg-slate-800 fixed z-10 top-0 left-0">
       <TransitionLink url="/" className="flex items-center w-1/5">
         <Image
           src="/logo.png"
@@ -98,7 +98,7 @@ export default function Header() {
                 }}
                 onFocus={() => setIsSearching(true)}
                 placeholder="Rechercher..."
-                className="w-full p-2 pl-10 pr-10 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 pl-10 pr-10 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900"
               />
               {searchTerm && (
                 <button

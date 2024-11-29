@@ -166,7 +166,7 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
       <h1 className="recipe-title text-4xl font-bold mb-2 text-center">
         {recipe.title}
       </h1>
-      <p className="recipe-subtitle text-xl text-gray-600 mb-8 text-center">
+      <p className="recipe-subtitle text-xl text-gray-400 mb-8 text-center">
         {recipe.commonTitle}
       </p>
 
@@ -210,7 +210,7 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
             </>
           )}
 
-          <div className="recipe-info bg-gray-100 p-6 rounded-lg shadow-md">
+          <div className="recipe-info  bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md mb-8">
             <h2 className="text-2xl font-semibold mb-4">Informations</h2>
             <div className="grid grid-cols-2 gap-4">
               <p>
@@ -242,27 +242,29 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
                   <span className="font-medium">Repos:</span> {recipe.restTime}
                 </p>
               )}
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="ingredients-section bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md mb-8">
+            <div className="flex flex-col mb-6 items-center">
+              <h2 className="text-2xl font-semibold mb-4">Ingrédients</h2>
               <p>
                 <span className="font-medium">Pour:</span>{" "}
                 <input
                   type="number"
                   value={nbPersons}
                   onChange={(e) => setNbPersons(parseInt(e.target.value))}
-                  className="w-12 h-8 text-center border border-gray-300 rounded-md"
+                  className="w-12 h-8 text-center border border-gray-300 rounded-md bg-transparent"
                 />{" "}
                 personne{nbPersons > 1 && "s"}
               </p>
             </div>
-          </div>
-        </div>
-
-        <div>
-          <div className="ingredients-section bg-gray-100 p-6 rounded-lg shadow-md mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Ingrédients</h2>
             <ul className="space-y-2">
               {recipe.ingredients.map((ingredient, index) => (
                 <li key={index} className="ingredient-item flex items-center">
-                  <span className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center mr-3">
+                  <span className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center mr-3">
                     {index + 1}
                   </span>
                   {ingredient.quantity &&
@@ -274,12 +276,12 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
             </ul>
           </div>
 
-          <div className="preparation-section bg-gray-100 p-6 rounded-lg shadow-md">
+          <div className="preparation-section bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md mb-8">
             <h2 className="text-2xl font-semibold mb-4">Préparation</h2>
             <ol className="space-y-4">
               {recipe.steps.map((step, index) => (
                 <li key={index} className="step-item flex">
-                  <span className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-1">
+                  <span className="w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-1">
                     {index + 1}
                   </span>
                   <span>{step}</span>
