@@ -43,7 +43,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
       .to(overlayRef.current, {
         scaleY: 0,
         duration: 0.4,
-        transformOrigin: "bottom",
+        transformOrigin: "top",
         ease: "power4.inOut",
         delay: 0.6,
       })
