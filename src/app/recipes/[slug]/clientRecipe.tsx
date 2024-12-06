@@ -293,7 +293,7 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
       </div>
 
       {(recipe.dressing || recipe.desc) && (
-        <div className="additional-info mt-12 bg-gray-100 p-6 rounded-lg shadow-md">
+        <div className="additional-info mt-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md">
           {recipe.dressing && (
             <>
               <h2 className="text-2xl font-semibold mb-4">Dressage</h2>
