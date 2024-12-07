@@ -5,6 +5,7 @@ import { Recipe } from "@/types/recipe";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import TransitionLink from "./transitionLink";
+
 interface HighlightRecipeProps {
   recipe: Recipe;
   onLeft: boolean;
@@ -28,30 +29,23 @@ const HighlightRecipe: React.FC<HighlightRecipeProps> = ({
   onLeft,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      if (!containerRef.current || !contentRef.current) return;
+      if (!containerRef.current) return;
 
-      gsap.fromTo(
-        contentRef.current,
-        {
-          x: onLeft ? "100%" : "-100%",
-          opacity: 0,
+      gsap.from(containerRef.current.querySelector(".recipe-content"), {
+        opacity: 0,
+        x: onLeft ? 50 : -50,
+        duration: 1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 85%",
+          end: "top 15%",
+          toggleActions: "play none none reverse",
         },
-        {
-          x: "0%",
-          opacity: 1,
-          duration: 1.5,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 80%",
-            toggleActions: "play",
-          },
-        }
-      );
+      });
     },
     { dependencies: [onLeft], scope: containerRef }
   );
@@ -77,6 +71,7 @@ const HighlightRecipe: React.FC<HighlightRecipeProps> = ({
               objectFit="cover"
               loading="lazy"
               className="recipe-img"
+              quality={75}
             />
           ) : (
             <div className="w-full h-full bg-gray-200 flex items-center justify-center">
@@ -85,10 +80,9 @@ const HighlightRecipe: React.FC<HighlightRecipeProps> = ({
           )}
         </div>
         <div
-          ref={contentRef}
           className={`recipe-content w-1/2 h-full p-4 flex flex-col justify-between overflow-hidden ${
             onLeft
-              ? "rounded-r-lg bg-[linear-gradient(225deg,_rgba(8,145,178,0.8)_0%,_rgba(8,145,178,0.6)_20%,_#1E293B_100%)] "
+              ? "rounded-r-lg bg-[linear-gradient(225deg,_rgba(8,145,178,0.8)_0%,_rgba(8,145,178,0.6)_20%,_#1E293B_100%)]"
               : "rounded-l-lg bg-[linear-gradient(135deg,_rgba(168,85,247,0.8)_0%,_rgba(168,85,247,0.6)_20%,_#1e293b_100%)]"
           }`}
         >
