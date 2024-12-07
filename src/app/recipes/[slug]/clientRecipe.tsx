@@ -31,107 +31,23 @@ export default function ClientRecipe({
       timelineRef.current = masterTimeline;
 
       masterTimeline
-        .from(".recipe-title", {
+        .from(".fade-in", {
           opacity: 0,
-          y: 50,
+          y: 30,
           duration: 0.8,
+          stagger: 0.1,
           ease: "power3.out",
         })
-        .from(
-          ".recipe-subtitle",
-          {
-            opacity: 0,
-            y: 30,
-            duration: 0.8,
-            ease: "power3.out",
-          },
-          "-=0.6"
-        )
         .from(
           ".recipe-image",
           {
             opacity: 0,
-            scale: 0.9,
-            duration: 1,
-            ease: "power3.out",
-          },
-          "-=0.6"
-        )
-        .from(
-          ".image-thumbnails",
-          {
-            opacity: 0,
-            y: 20,
-            duration: 0.8,
-            ease: "power3.out",
-          },
-          "-=0.4"
-        )
-        .from(
-          ".recipe-info",
-          {
-            opacity: 0,
-            y: 30,
-            duration: 0.8,
-            ease: "power3.out",
-          },
-          "-=0.4"
-        )
-        .from(
-          ".ingredients-section",
-          {
-            opacity: 0,
-            y: 30,
+            scale: 0.95,
             duration: 0.8,
             ease: "power3.out",
           },
           "-=0.6"
-        )
-        .from(
-          ".ingredient-item",
-          {
-            opacity: 0,
-            y: 20,
-            duration: 0.5,
-            stagger: 0.1,
-            ease: "power3.out",
-          },
-          "-=0.4"
-        )
-        .from(
-          ".preparation-section",
-          {
-            opacity: 0,
-            y: 30,
-            duration: 0.8,
-            ease: "power3.out",
-          },
-          "-=0.6"
-        )
-        .from(
-          ".step-item",
-          {
-            opacity: 0,
-            y: 20,
-            duration: 0.5,
-            stagger: 0.1,
-            ease: "power3.out",
-          },
-          "-=0.4"
         );
-
-      if (recipe.dressing || recipe.desc) {
-        masterTimeline.from(
-          ".additional-info",
-          {
-            opacity: 0,
-            y: 30,
-            duration: 0.8,
-            ease: "power3.out",
-          },
-          "-=0.4"
-        );
-      }
 
       masterTimeline.play();
     },
@@ -172,7 +88,7 @@ export default function ClientRecipe({
     <div ref={containerRef} className="container mx-auto px-4 pt-20 mb-28">
       {/* Header */}
       <div className="max-w-4xl mx-auto mb-12">
-        <h1 className="recipe-title text-4xl font-bold mb-2 text-center">
+        <h1 className="recipe-title text-4xl font-bold mb-2 text-center fade-in">
           {recipe.title}
         </h1>
         <p className="recipe-subtitle text-xl text-gray-400 text-center">
@@ -193,6 +109,9 @@ export default function ClientRecipe({
                   layout="fill"
                   objectFit="cover"
                   className="rounded-lg recipe-img"
+                  quality={75}
+                  priority={true}
+                  loading="eager"
                 />
               </div>
               <div className="image-thumbnails flex gap-4">
@@ -228,7 +147,7 @@ export default function ClientRecipe({
         </div>
 
         {/* Colonne informations */}
-        <div className="recipe-info bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md">
+        <div className="recipe-info bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md fade-in">
           <h2 className="text-2xl font-semibold mb-6">Informations</h2>
           <div className="grid grid-cols-2 gap-y-6">
             <p>
@@ -265,14 +184,14 @@ export default function ClientRecipe({
 
       {/* Description si elle existe */}
       {recipe.desc && (
-        <div className="mb-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md">
+        <div className="mb-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md fade-in">
           <h2 className="text-2xl font-semibold mb-4">Description</h2>
           <p>{recipe.desc}</p>
         </div>
       )}
 
       {/* Ingrédients */}
-      <div className="ingredients-section mb-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md">
+      <div className="ingredients-section mb-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md fade-in">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-semibold">Ingrédients</h2>
           <div className="flex items-center gap-2">
@@ -304,7 +223,7 @@ export default function ClientRecipe({
       </div>
 
       {/* Préparation */}
-      <div className="preparation-section mb-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md">
+      <div className="preparation-section mb-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md fade-in">
         <h2 className="text-2xl font-semibold mb-6">Préparation</h2>
         <ol className="space-y-6">
           {recipe.steps.map((step, index) => (
@@ -320,7 +239,7 @@ export default function ClientRecipe({
 
       {/* Dressage si il existe */}
       {recipe.dressing && (
-        <div className="mb-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md">
+        <div className="mb-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md fade-in">
           <h2 className="text-2xl font-semibold mb-4">Dressage</h2>
           <p>{recipe.dressing}</p>
         </div>
