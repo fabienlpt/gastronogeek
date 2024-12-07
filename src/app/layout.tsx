@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./components/header";
 import Footer from "./components/footer";
+import Background from "@/components/background";
 
 export const metadata: Metadata = {
   title: "Gastronogeek",
@@ -30,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-[#0F172A] text-white">
+        <Background />
         <GSAP>
           <PageTransition>
             <Header />
