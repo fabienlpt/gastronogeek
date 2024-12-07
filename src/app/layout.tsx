@@ -8,6 +8,18 @@ import Footer from "./components/footer";
 export const metadata: Metadata = {
   title: "Gastronogeek",
   description: "Gastronogeek, the geek cooking website",
+  keywords: [
+    "geek",
+    "cooking",
+    "recipes",
+    "gastronogeek",
+    "food",
+    "recettes",
+    "cuisine",
+  ],
+  authors: [{ name: "Fabien Lapert" }],
+  creator: "Fabien Lapert",
+  publisher: "Fabien Lapert",
 };
 
 export default function RootLayout({
