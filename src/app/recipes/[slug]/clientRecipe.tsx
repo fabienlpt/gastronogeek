@@ -6,8 +6,15 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Recipe } from "@/types/recipe";
 import { useStore } from "@/lib/store";
+import HighlightRecipe from "@/components/highlightRecipe";
 
-export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
+export default function ClientRecipe({
+  recipe,
+  similarRecipes,
+}: {
+  recipe: Recipe;
+  similarRecipes: Recipe[];
+}) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [nbPersons, setNbPersons] = useState(recipe.defaultPersons);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -162,15 +169,20 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
   };
 
   return (
-    <div ref={containerRef} className="container mx-auto pt-20 mb-28">
-      <h1 className="recipe-title text-4xl font-bold mb-2 text-center">
-        {recipe.title}
-      </h1>
-      <p className="recipe-subtitle text-xl text-gray-400 mb-8 text-center">
-        {recipe.commonTitle}
-      </p>
+    <div ref={containerRef} className="container mx-auto px-4 pt-20 mb-28">
+      {/* Header */}
+      <div className="max-w-4xl mx-auto mb-12">
+        <h1 className="recipe-title text-4xl font-bold mb-2 text-center">
+          {recipe.title}
+        </h1>
+        <p className="recipe-subtitle text-xl text-gray-400 text-center">
+          {recipe.commonTitle}
+        </p>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      {/* Zone avec deux colonnes */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        {/* Colonne images */}
         <div>
           {recipe.images && recipe.images.length > 0 && (
             <>
@@ -183,11 +195,15 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
                   className="rounded-lg recipe-img"
                 />
               </div>
-              <div className="image-thumbnails flex space-x-2 mb-4">
+              <div className="image-thumbnails flex gap-4">
                 {recipe.images.slice(0, 3).map((image, index) => (
                   <div
                     key={index}
-                    className="relative w-1/3 h-24 cursor-pointer"
+                    className={`relative w-1/3 h-24 cursor-pointer overflow-hidden rounded-lg ${
+                      currentImageIndex === index
+                        ? "ring-2 ring-cyan-500"
+                        : "hover:opacity-80"
+                    }`}
                     onClick={() => setCurrentImageIndex(index)}
                   >
                     <Image
@@ -195,10 +211,10 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
                       alt={`${recipe.title} - Image ${index + 1}`}
                       layout="fill"
                       objectFit="cover"
-                      className="rounded-md recipe-img"
+                      className="recipe-img"
                     />
                     {index === 2 && recipe.images.length > 4 && (
-                      <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-md">
+                      <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                         <span className="text-white font-bold text-lg">
                           +{recipe.images.length - 3}
                         </span>
@@ -209,103 +225,119 @@ export default function ClientRecipe({ recipe }: { recipe: Recipe }) {
               </div>
             </>
           )}
-
-          <div className="recipe-info  bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Informations</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <p>
-                <span className="font-medium">Catégorie:</span>{" "}
-                {recipe.category}
-              </p>
-              <p>
-                <span className="font-medium">Licence:</span> {recipe.license}
-              </p>
-              <p>
-                <span className="font-medium">Type:</span> {recipe.type}
-              </p>
-              <p>
-                <span className="font-medium">Difficulté:</span>{" "}
-                {getDifficultyLabel(recipe.difficulty)}
-              </p>
-              <p>
-                <span className="font-medium">Préparation:</span>{" "}
-                {recipe.prepTime}
-              </p>
-              {recipe.cookingTime && (
-                <p>
-                  <span className="font-medium">Cuisson:</span>{" "}
-                  {recipe.cookingTime}
-                </p>
-              )}
-              {recipe.restTime && (
-                <p>
-                  <span className="font-medium">Repos:</span> {recipe.restTime}
-                </p>
-              )}
-            </div>
-          </div>
         </div>
 
-        <div>
-          <div className="ingredients-section bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md mb-8">
-            <div className="flex flex-col mb-6 items-center">
-              <h2 className="text-2xl font-semibold mb-4">Ingrédients</h2>
+        {/* Colonne informations */}
+        <div className="recipe-info bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-6">Informations</h2>
+          <div className="grid grid-cols-2 gap-y-6">
+            <p>
+              <span className="font-medium">Catégorie:</span> {recipe.category}
+            </p>
+            <p>
+              <span className="font-medium">Licence:</span> {recipe.license}
+            </p>
+            <p>
+              <span className="font-medium">Type:</span> {recipe.type}
+            </p>
+            <p>
+              <span className="font-medium">Difficulté:</span>{" "}
+              {getDifficultyLabel(recipe.difficulty)}
+            </p>
+            <p>
+              <span className="font-medium">Préparation:</span>{" "}
+              {recipe.prepTime}
+            </p>
+            {recipe.cookingTime && (
               <p>
-                <span className="font-medium">Pour:</span>{" "}
-                <input
-                  type="number"
-                  value={nbPersons}
-                  onChange={(e) => setNbPersons(parseInt(e.target.value))}
-                  className="w-12 h-8 text-center border border-gray-300 rounded-md bg-transparent"
-                />{" "}
-                personne{nbPersons > 1 && "s"}
+                <span className="font-medium">Cuisson:</span>{" "}
+                {recipe.cookingTime}
               </p>
-            </div>
-            <ul className="space-y-2">
-              {recipe.ingredients.map((ingredient, index) => (
-                <li key={index} className="ingredient-item flex items-center">
-                  <span className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center mr-3">
-                    {index + 1}
-                  </span>
-                  {ingredient.quantity &&
-                    `${getQuantity(ingredient.quantity)} `}
-                  {ingredient.unit && `${ingredient.unit} `}
-                  {ingredient.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="preparation-section bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Préparation</h2>
-            <ol className="space-y-4">
-              {recipe.steps.map((step, index) => (
-                <li key={index} className="step-item flex">
-                  <span className="w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-1">
-                    {index + 1}
-                  </span>
-                  <span>{step}</span>
-                </li>
-              ))}
-            </ol>
+            )}
+            {recipe.restTime && (
+              <p>
+                <span className="font-medium">Repos:</span> {recipe.restTime}
+              </p>
+            )}
           </div>
         </div>
       </div>
 
-      {(recipe.dressing || recipe.desc) && (
-        <div className="additional-info mt-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md">
-          {recipe.dressing && (
-            <>
-              <h2 className="text-2xl font-semibold mb-4">Dressage</h2>
-              <p className="mb-6">{recipe.dressing}</p>
-            </>
-          )}
-          {recipe.desc && (
-            <>
-              <h2 className="text-2xl font-semibold mb-4">Description</h2>
-              <p>{recipe.desc}</p>
-            </>
-          )}
+      {/* Description si elle existe */}
+      {recipe.desc && (
+        <div className="mb-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-4">Description</h2>
+          <p>{recipe.desc}</p>
+        </div>
+      )}
+
+      {/* Ingrédients */}
+      <div className="ingredients-section mb-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-semibold">Ingrédients</h2>
+          <div className="flex items-center gap-2">
+            <span className="font-medium">Pour:</span>
+            <input
+              type="number"
+              value={nbPersons}
+              onChange={(e) => setNbPersons(parseInt(e.target.value))}
+              className="w-16 h-8 text-center border border-gray-300 rounded-md bg-transparent"
+              min="1"
+            />
+            <span>personne{nbPersons > 1 && "s"}</span>
+          </div>
+        </div>
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {recipe.ingredients.map((ingredient, index) => (
+            <li key={index} className="ingredient-item flex items-center">
+              <span className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                {index + 1}
+              </span>
+              <span>
+                {ingredient.quantity && `${getQuantity(ingredient.quantity)} `}
+                {ingredient.unit && `${ingredient.unit} `}
+                {ingredient.name}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Préparation */}
+      <div className="preparation-section mb-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-semibold mb-6">Préparation</h2>
+        <ol className="space-y-6">
+          {recipe.steps.map((step, index) => (
+            <li key={index} className="step-item flex items-start">
+              <span className="w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-1">
+                {index + 1}
+              </span>
+              <span className="flex-1">{step}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      {/* Dressage si il existe */}
+      {recipe.dressing && (
+        <div className="mb-12 bg-cyan-500 bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-10 p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-4">Dressage</h2>
+          <p>{recipe.dressing}</p>
+        </div>
+      )}
+
+      {similarRecipes.length > 0 && (
+        <div className="mt-20">
+          <h2 className="text-3xl font-bold mb-8">Recettes similaires</h2>
+          <div className="space-y-12">
+            {similarRecipes.map((similarRecipe, index) => (
+              <HighlightRecipe
+                key={similarRecipe.slug}
+                recipe={similarRecipe}
+                onLeft={index % 2 === 0}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>

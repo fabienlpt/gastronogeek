@@ -32,3 +32,15 @@ export async function searchRecipes(query: string): Promise<Recipe[]> {
       recipe.commonTitle.toLowerCase().includes(searchTerm)
   );
 }
+
+export async function getSimilarRecipes(recipe: Recipe): Promise<Recipe[]> {
+  const recipes = await getRecipes();
+
+  return recipes
+    .filter(
+      (r) =>
+        r.slug !== recipe.slug &&
+        (r.license === recipe.license || r.type === recipe.type)
+    )
+    .slice(0, 3);
+}
